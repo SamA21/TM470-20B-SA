@@ -1,0 +1,24 @@
+<p *ngIf="!venues"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="venues?.length > 0">
+  <thead>
+    <tr>
+      <th>Venue Name</th>
+      <th>Venue Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let venue of venues">
+      <td>
+        {{ venue.venueName }}
+      </td>
+      <td>
+        {{ venue.venueLocation }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="venues?.length == 0">
+  No venues found
+</div>

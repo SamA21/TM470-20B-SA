@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-md-12">
+    <button class="btn btn-primary" (click)="CreateVenue()">Create Venue</button>
+  </div>
+</div>
+
+<div class="modal"  id="CreateVenueForm" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Venue</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label>Venue Name</label>
+        <input placeholder="Enter Venue Name" id="VenueName" class="form-control" />
+        <label>Venue Location</label>
+        <input placeholder="Enter Venue Location" id="VenueLocation" class="form-control" />
+        <div *ngIf="ErrorMessageShow">
+            Failed to create venue. 
+        </div>
+      </div>      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="SubmitVenue()">Submit New Venue</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
