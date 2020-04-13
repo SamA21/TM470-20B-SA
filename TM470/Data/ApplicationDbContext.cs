@@ -17,5 +17,12 @@ namespace TM470.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+
+        public virtual DbSet<Company> Company { get; set; }
+        public virtual DbSet<Venue> Venue { get; set; }
+        public virtual DbSet<Event> Event { get; set; }
+        public virtual DbSet<EventType> EventType { get; set; }
+        
     }
+
 }

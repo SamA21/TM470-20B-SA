@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TM470.Data;
 
 namespace TM470.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200412171433_company")]
+    partial class company
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,9 +246,6 @@ namespace TM470.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -299,8 +298,6 @@ namespace TM470.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -326,107 +323,6 @@ namespace TM470.Data.Migrations
                     b.HasKey("CompanyId");
 
                     b.ToTable("Company");
-                });
-
-            modelBuilder.Entity("TM470.Models.Event", b =>
-                {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EventDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EventInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EventLive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("EventLivedate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EventName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EventTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("VenueId")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("int");
-
-                    b.HasKey("EventId");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("EventTypeId");
-
-                    b.HasIndex("UpdatedById");
-
-                    b.HasIndex("VenueId");
-
-                    b.ToTable("Event");
-                });
-
-            modelBuilder.Entity("TM470.Models.EventType", b =>
-                {
-                    b.Property<int>("EventTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Capcity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("EventTypeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("VenueId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EventTypeId");
-
-                    b.HasIndex("VenueId");
-
-                    b.ToTable("EventType");
-                });
-
-            modelBuilder.Entity("TM470.Models.Venue", b =>
-                {
-                    b.Property<int>("VenueId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("VenueLocation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VenueName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("VenueId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("Venue");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -476,56 +372,6 @@ namespace TM470.Data.Migrations
                     b.HasOne("TM470.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TM470.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("TM470.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TM470.Models.Event", b =>
-                {
-                    b.HasOne("TM470.Models.ApplicationUser", "CreatedBy")
-                        .WithMany("EventsCreated")
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("TM470.Models.EventType", "EventType")
-                        .WithMany()
-                        .HasForeignKey("EventTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TM470.Models.ApplicationUser", "UpdatedBy")
-                        .WithMany("EventsUpdated")
-                        .HasForeignKey("UpdatedById");
-
-                    b.HasOne("TM470.Models.Venue", "Venue")
-                        .WithMany()
-                        .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TM470.Models.EventType", b =>
-                {
-                    b.HasOne("TM470.Models.Venue", "Venue")
-                        .WithMany()
-                        .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TM470.Models.Venue", b =>
-                {
-                    b.HasOne("TM470.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
