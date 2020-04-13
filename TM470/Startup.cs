@@ -36,7 +36,7 @@ namespace TM470
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-            services.AddAuthentication()
+            services.AddAuthentication()               
                 .AddIdentityServerJwt();
             services.AddControllersWithViews();
             services.AddRazorPages();
