@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap-datepicker'
@@ -30,14 +30,6 @@ export class CreateEventComponent {
     this.selectedEventVenue.name = "Select Event Venue";  
   }
 
-  private yyyymmdd(dateIn) {
-    var yyyy = dateIn.getFullYear();
-    var mm = dateIn.getMonth() + 1; // getMonth() is zero-based
-    var dd = dateIn.getDate();
-    return String(10000 * yyyy + "-" + 100 * mm + "-" +  dd); // Leading zeros for mm and dd
-  }
-
-
   public CreateEvent() {
     $('#CreateEventForm').modal();
     $('.datepicker').datepicker({
@@ -55,14 +47,6 @@ export class CreateEventComponent {
       .subscribe(result => {
         this.venues = result;
       }, error => console.error(error));
-  }
-
-  public SelectEventType(eventType) {
-    this.selectedEventType = eventType;
-  }
-
-  public SelectEventVenue(venue) {
-    this.selectedEventVenue = venue;
   }
 
   public SubmitEvent() {
@@ -117,7 +101,17 @@ export class CreateEventComponent {
       }
     }
   }
+
+  public SelectEventType(eventType) {
+    this.selectedEventType = eventType;
+  }
+
+  public SelectEventVenue(venue) {
+    this.selectedEventVenue = venue;
+  }
 }
+
+
 
 interface EventTypes {
   id: number;

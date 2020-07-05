@@ -1,24 +1,27 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+
 import $ from 'jquery';
 import 'bootstrap';
 @Component({
   selector: 'edit-event',
   templateUrl: './edit-event.html'
 })
-export class EditEventComponent {
-  public event: EventEditModel;
+export class EditEventComponent{
+  public event: any;
   public ErrorMessageShow: boolean;
 
   private _http: HttpClient;
   private _baseUrl: string;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  constructor(private router: ActivatedRoute, http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this._http = http;
     this._baseUrl = baseUrl;
     this.event = <EventEditModel>{};
     this.ErrorMessageShow = false;
   }
+
 
   public SubmitEditVenue() {
     this.ErrorMessageShow = false;
@@ -58,6 +61,18 @@ interface EventEditModel{
   capacity: number;
 }
 
+interface EventTypes {
+  id: number;
+  type: string;
+}
+
+interface Venues {
+  id: number;
+  name: string;
+  location: string;
+  capacity: number;
+  numberOfEvents: number;
+}
 
 interface EventEditResult {
   message: string;

@@ -40,12 +40,12 @@ namespace TM470.Controllers
                 {
                     events.Events = _dbContext.Event.Where(x => x.CompanyId == company.CompanyId).Select(x => new EventViewModel()
                     {
-                        EventLiveDate = x.EventLiveDate,
+                        EventLiveDate = x.EventLiveDate.ToString("dd/MM/yyyy"),
                         EventCapacity = x.EventCapacity,
                         TicketPrice = x.TicketPrice,
                         EventType = x.EventType,
                         Venue = x.Venue,
-                        EventDate = x.EventDate,
+                        EventDate = x.EventDate.ToString("dd/MM/yyyy"),
                         Id = x.EventId,
                         Information = x.EventInformation,
                         Name = x.EventName,

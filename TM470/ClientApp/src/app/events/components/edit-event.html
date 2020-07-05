@@ -1,27 +1,56 @@
-<div class="modal" id="EditVenueForm" tabindex="-1" role="dialog">
+<div class="modal" id="EditEventForm" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Edit Venue</h5>
+        <h5 class="modal-title">Edit Event</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <input id="EditVenueId" type="hidden" class="form-control" />
-        <label>Venue Name</label>
-        <input placeholder="Enter Venue Name" id="EditVenueName" class="form-control" />
-        <label>Venue Location</label>
-        <input placeholder="Enter Venue Location" id="EditVenueLocation" class="form-control" />
-        <label>Venue Capacity</label>
-        <input placeholder="Enter Venue Capacity" id="EditVenueCapacity" class="form-control" />
+        <label>Event Name</label>
+        <input placeholder="Enter Event Name" id="EditEventName" class="form-control" />
+        <label>Event Description</label>
+        <textarea placeholder="Enter Event Information" id="EditEventInformation" rows="4" class="form-control"></textarea>
+        <label>Event Date</label>
+        <input placeholder="dd/mm/yyyy" id="EditEventDate" class="datepicker form-control" title="The date the event will take place" />
+        <label>Event Type</label>
+        <div class="dropdown" *ngIf="eventTypes?.eventTypes?.length > 0">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            {{selectedEventType.type}}
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li *ngFor="let type of eventTypes.eventTypes">
+              <a class="dropdown-item" (click)="SelectEditEventType(type)">{{type.type}}</a>
+            </li>
+          </ul>
+        </div>
+        <label>Event Venue</label>
+        <div class="dropdown" *ngIf="venues?.venues?.length > 0">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            {{selectedEventVenue.name}}
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li *ngFor="let venue of venues.venues">
+              <a class="dropdown-item" (click)="SelectEditEventVenue(venue)">{{venue.name}}</a>
+            </li>
+          </ul>
+        </div>
+        <label>Event Live Date</label>
+        <input placeholder="dd/mm/yyyy" id="EditEventLiveDate" class="datepicker form-control" title="When the event goes live for users to be able to say there intrested and it promoted on the website" />
+        <label>Event Capacity</label>
+        <input placeholder="Enter Event Capcity" id="EditEventCapacity" class="form-control" title="Leave blank to use venue capacity" />
+        <label>Event Price</label>
+        <input placeholder="Enter Ticket Price (29.99 etc)" id="EditEventPrice" class="form-control" title="If left blank or invalid number it sets price to 0" />
 
         <div *ngIf="ErrorMessageShow">
-          Failed to edit venue.
+          Failed to create event.
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="SubmitEditVenue()">Edit Venue</button>
+        <button type="button" class="btn btn-primary" (click)="SubmitEditEvent()">Edit Event</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
