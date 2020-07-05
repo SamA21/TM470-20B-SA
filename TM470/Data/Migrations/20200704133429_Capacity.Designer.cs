@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TM470.Data;
 
 namespace TM470.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200704133429_Capacity")]
+    partial class Capacity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,9 +337,6 @@ namespace TM470.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedById")
                         .HasColumnType("nvarchar(450)");
 
@@ -356,7 +355,7 @@ namespace TM470.Data.Migrations
                     b.Property<bool>("EventLive")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("EventLiveDate")
+                    b.Property<DateTime>("EventLivedate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EventName")
@@ -381,11 +380,10 @@ namespace TM470.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("VenueId")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("int");
 
                     b.HasKey("EventId");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("CreatedById");
 
@@ -405,15 +403,18 @@ namespace TM470.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CompanyId")
+                    b.Property<int>("Capcity")
                         .HasColumnType("int");
 
                     b.Property<string>("EventTypeName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("VenueId")
+                        .HasColumnType("int");
+
                     b.HasKey("EventTypeId");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("VenueId");
 
                     b.ToTable("EventType");
                 });
@@ -507,12 +508,6 @@ namespace TM470.Data.Migrations
 
             modelBuilder.Entity("TM470.Models.Event", b =>
                 {
-                    b.HasOne("TM470.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TM470.Models.ApplicationUser", "CreatedBy")
                         .WithMany("EventsCreated")
                         .HasForeignKey("CreatedById");
@@ -536,9 +531,9 @@ namespace TM470.Data.Migrations
 
             modelBuilder.Entity("TM470.Models.EventType", b =>
                 {
-                    b.HasOne("TM470.Models.Company", "Company")
+                    b.HasOne("TM470.Models.Venue", "Venue")
                         .WithMany()
-                        .HasForeignKey("CompanyId")
+                        .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

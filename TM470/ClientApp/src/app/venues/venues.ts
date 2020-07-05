@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'venues',
-  templateUrl: './venues.component.html',
-  styleUrls: ['./venues.component.css']
+  templateUrl: './venues.html',
+  styleUrls: ['./venues.css']
 })
 export class VenuesComponent {
   

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TM470.Data;
 
 namespace TM470.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200705120150_eventtypechange")]
+    partial class eventtypechange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -356,7 +358,7 @@ namespace TM470.Data.Migrations
                     b.Property<bool>("EventLive")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("EventLiveDate")
+                    b.Property<DateTime>("EventLivedate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EventName")
@@ -381,6 +383,7 @@ namespace TM470.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("VenueId")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("int");
 
                     b.HasKey("EventId");

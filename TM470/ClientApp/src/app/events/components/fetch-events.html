@@ -1,0 +1,49 @@
+<div *ngIf="!events">
+  <p><em>Loading...</em></p>
+</div>
+<div *ngIf="events">
+  <table id="EventsList" class='table table-striped' aria-labelledby="tableLabel" *ngIf="events.events?.length > 0">
+    <thead>
+      <tr>
+        <th>Event Name</th>
+        <th>Event Capacity</th>
+        <th>Event Venue</th>
+        <th>Event Type</th>
+        <th>People Intrested</th>
+        <th>Ticket Price</th>
+        <th>Tickets Sold</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let event of events.events" (click)="editEvent(event)">
+        <td>
+          {{ event.name }}
+        </td>
+        <td>
+          {{ event.eventCapacity }}
+        </td>
+        <td>
+          {{ event.venue.venueName }}
+        </td>
+        <td>
+          {{ event.eventType.eventTypeName }}
+        </td>
+        <td>
+          {{ event.peopleIntrested }}
+        </td>
+        <td>
+          £{{ event.ticketPrice.toFixed(2) }}
+        </td>
+        <td>
+          {{ event.ticketsSold }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="events.events?.length == 0">
+    No events found
+  </div>
+
+  <edit-event></edit-event>
+</div>

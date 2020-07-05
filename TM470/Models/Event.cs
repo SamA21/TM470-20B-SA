@@ -16,8 +16,7 @@ namespace TM470.Models
         public string EventInformation { get; set; }
         public DateTime EventDate { get; set; }
         public bool EventLive { get; set; }
-        public DateTime EventLivedate { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime EventLiveDate { get; set; }
         public int VenueId { get; set; }
         [ForeignKey("VenueId")]
         public Venue Venue { get; set; }
@@ -29,6 +28,15 @@ namespace TM470.Models
         public ApplicationUser UpdatedBy { get; set; }
 
         public DateTime UpdateDate { get; set; }
+
+        public int PeopleIntrested { get; set; } 
+        public int EventCapacity { get; set; }// if needs to be different to venue capacity
+        public decimal TicketPrice { get; set; }
+        public int TicketsSold { get; set; }
+        public int CompanyId { get; set; }
+
+        [ForeignKey("CompanyId")]
+        public Company Company { get; set; }
 
     }
 }

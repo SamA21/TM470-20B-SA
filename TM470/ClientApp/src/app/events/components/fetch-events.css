@@ -1,0 +1,7 @@
+#VenuesList tr:hover{
+    cursor:pointer;
+}
+
+#VenuesList tr span:hover {
+  cursor: default!important;
+}

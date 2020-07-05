@@ -1,0 +1,35 @@
+<div *ngIf="!venues">
+  <p ><em>Loading...</em></p>
+ </div>
+
+<div *ngIf="venues">
+  <table id="VenuesList" class='table table-striped' aria-labelledby="tableLabel" *ngIf="venues.venues?.length > 0">
+    <thead>
+      <tr>
+        <th>Venue Name</th>
+        <th>Venue Location</th>
+        <th>Venue Capacity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let venue of venues.venues" (click)="editVenue(venue)">
+        <td>
+          {{ venue.name }}
+        </td>
+        <td>
+          {{ venue.location }}
+        </td>
+        <td style="text-align:center">          
+          {{ venue.capacity }}
+          <span style="float:right;margin-right:25%;padding:7px;" class="badge badge-dark" title="{{venue.numberOfEvents}} Events Scheduled">{{venue.numberOfEvents}}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="venues?.length == 0">
+    No venues found
+  </div>
+
+  <edit-venue></edit-venue>
+</div>

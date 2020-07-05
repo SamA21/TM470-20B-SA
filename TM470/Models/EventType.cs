@@ -13,9 +13,8 @@ namespace TM470.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EventTypeId { get; set; }
         public string EventTypeName { get; set; }
-        public int Capcity { get; set; }
-        public int VenueId { get; set; }
-        [ForeignKey("VenueId")]
-        public Venue Venue { get; set; }
+        public int CompanyId { get; set; }
+        [ForeignKey("CompanyId")]
+        public Company Company { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace TM470.Models
         public int CompanyId { get; set; }
         [ForeignKey("CompanyId")]
         public Company Company { get; set; }
+        public int Capacity { get; set; }
     }
 }

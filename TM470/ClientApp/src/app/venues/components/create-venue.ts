@@ -4,10 +4,10 @@ import $ from 'jquery';
 import 'bootstrap';
 
 @Component({
-  selector: 'app-create-venues',
-  templateUrl: './create-venues.component.html'
+  selector: 'create-venue',
+  templateUrl: './create-venue.html'
 })
-export class CreateVenuesComponent {
+export class CreateVenueComponent {
   public venue: VenueViewModel;
   public ErrorMessageShow: boolean;
 
@@ -30,22 +30,30 @@ export class CreateVenuesComponent {
 
     this.venue.name = $("#VenueName").val();
     this.venue.location = $("#VenueLocation").val();
-    var url = this._baseUrl + 'venues' + '/SubmitNewVenue';
-    this._http.post<VenueResult>(url, { Location: this.venue.location, Name: this.venue.name})
-      .subscribe(result => {
-        if (result.message == "Created new Venue") {
-          window.location.reload();
-        } else {
-          this.ErrorMessageShow = true;
-        }
-        
-    }, error => console.error(error));
+    var capacity = $("#VenueCapacity").val();
+    if (parseInt(capacity) != NaN) {
+      this.venue.capacity = parseInt(capacity);
+      var url = this._baseUrl + 'venues' + '/SubmitNewVenue';
+      this._http.post<VenueResult>(url, { Name: this.venue.name, Location: this.venue.location,  Capacity: this.venue.capacity })
+        .subscribe(result => {
+          if (result.message == "Created new Venue") {
+            window.location.reload();
+          } else {
+            this.ErrorMessageShow = true;
+          }
+
+        }, error => console.error(error));
+    }
+    else {
+      this.ErrorMessageShow = true;
+    }
   }
 }
 
 interface VenueViewModel {
   name: string;
   location: string;
+  capacity: number;
 }
 
 interface VenueResult {
