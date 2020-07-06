@@ -7,5 +7,5 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./events.css']
 })
 export class EventsComponent {
-  
+
 }

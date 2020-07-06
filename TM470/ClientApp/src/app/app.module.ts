@@ -18,7 +18,6 @@ import { EditVenueComponent } from './venues/components/edit-venue';
 import { EventsComponent } from './events/events';
 import { FetchEventsComponent } from './events/components/fetch-events';
 import { CreateEventComponent } from './events/components/create-event';
-import { EditEventComponent } from './events/components/edit-event';
 
 
 @NgModule({
@@ -32,8 +31,7 @@ import { EditEventComponent } from './events/components/edit-event';
     EditVenueComponent,
     EventsComponent,
     FetchEventsComponent,
-    CreateEventComponent,
-    EditEventComponent
+    CreateEventComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -48,8 +46,7 @@ import { EditEventComponent } from './events/components/edit-event';
       { path: 'edit-venue', component: EditVenueComponent, canActivate: [AuthorizeGuard] },
       { path: 'events', component: EventsComponent, canActivate: [AuthorizeGuard] },
       { path: 'fetch-events', component: FetchEventsComponent, canActivate: [AuthorizeGuard] },
-      { path: 'create-event', component: CreateEventComponent, canActivate: [AuthorizeGuard] },
-      { path: 'edit-event', component: EditEventComponent, canActivate: [AuthorizeGuard] }
+      { path: 'create-event', component: CreateEventComponent, canActivate: [AuthorizeGuard] }
     ])
   ],
   providers: [
