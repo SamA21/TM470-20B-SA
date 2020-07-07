@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using TM470.Data;
+using TM470.Models.db;
 using TM470.Models;
 
 namespace TM470.Controllers
@@ -32,7 +33,7 @@ namespace TM470.Controllers
         {
             EventsViewModel events = new EventsViewModel();
             events.Events = new List<EventViewModel>();
-            var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var currentUser = _dbContext.Users.SingleOrDefault(x => x.Id == currentUserId);
             if (currentUser != null)
             {
@@ -55,6 +56,27 @@ namespace TM470.Controllers
                     }).ToList();
 
                 }
+            }
+            else
+            {
+                events.Events = _dbContext.Event.Where(x => (x.EventLive || x.EventLiveDate < DateTime.Now)
+                    && x.EventDate > DateTime.Now).OrderBy(x => x.EventDate)
+                    .Select(x => new EventViewModel()
+                {
+                    EventLiveDate = x.EventLiveDate.ToString("dd/MM/yyyy"),
+                    EventCapacity = x.EventCapacity,
+                    TicketPrice = x.TicketPrice,
+                    EventType = x.EventType,
+                    Venue = x.Venue,
+                    EventDate = x.EventDate.ToString("dd/MM/yyyy"),
+                    Id = x.EventId,
+                    Information = x.EventInformation,
+                    Name = x.EventName,
+                    PeopleIntrested = x.PeopleIntrested,
+                    TicketsSold = x.TicketsSold,
+                    Company = _dbContext.Company.SingleOrDefault(y => y.CompanyId == x.CompanyId),
+                    CompanyId = x.CompanyId
+                }).ToList();
             }
             return events; // will return an empty venue list if can't find user/ company. 
         }

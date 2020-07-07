@@ -1,0 +1,7 @@
+.card:hover {
+  cursor: pointer;
+}
+
+#selectedEvent label{
+    font-weight:bolder;
+}

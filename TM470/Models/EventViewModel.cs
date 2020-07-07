@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TM470.Models.db;
 
 namespace TM470.Models
 {
@@ -18,6 +19,9 @@ namespace TM470.Models
         public decimal TicketPrice { get; set; }
         public int TicketsSold { get; set; }
         public int PeopleIntrested { get; set; }
+        public int CompanyId { get; set; }
+        public Company Company { get; set; }
+        public int DaysUntilEvent { get; set; }
 
     }
 }

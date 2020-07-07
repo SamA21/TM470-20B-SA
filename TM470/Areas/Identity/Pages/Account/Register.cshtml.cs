@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using TM470.Data;
-using TM470.Models;
+using TM470.Models.db;
 
 namespace TM470.Areas.Identity.Pages.Account
 {

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TM470.Data;
 using TM470.Models;
+using TM470.Models.db;
 
 namespace TM470.Controllers
 {

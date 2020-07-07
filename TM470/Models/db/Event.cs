@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TM470.Models
+namespace TM470.Models.db
 {
     public class Event
     {

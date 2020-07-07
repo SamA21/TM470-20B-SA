@@ -1,1 +1,76 @@
-<h1>Hello, TM470B!</h1>
+<h1>Welcome to Pinch Events</h1>
+
+
+<div class="card-deck">
+  <div class="card" *ngFor="let event of events" (click)="selectEvent(event)">
+    <div class="card-body">
+      <h5 class="card-title">{{event.name}}</h5>
+      <p class="card-text">{{ (event.information.length > 100 ? event.information.slice(' ', 120) + '...' : event.information)}}</p>
+      <p class="card-text"><small class="text-muted">Event Date {{ (event.daysUntilEvent == 0 ? "Today" : "in " + event.daysUntilEvent + " day(s)" )}}</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="selectedEvent" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{selectedEvent?.name}}
+          <br/>
+          <small>An Event By {{selectedEvent?.company.companyName}} hosted on the {{selectedEvent?.eventDate}}</small>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input id="EditEventId" type="hidden" class="form-control" value="{{selectedEvent?.id}}" />
+        <label>Event Description</label>
+        <p>{{selectedEvent?.information}}</p>
+        <label>Event Date</label>
+        <p>{{selectedEvent?.eventDate}}</p>
+        <label>Event Type</label>
+        <p>
+          {{selectedEvent?.eventType.eventTypeName}}
+        </p>
+        <label>Event Venue</label>
+        <p>
+          Hosted at {{selectedEvent?.venue.venueName}} in {{selectedEvent?.venue.venueLocation}}
+        </p>
+        <label>Event Price</label>
+        <p>
+          £{{selectedEvent?.ticketPrice?.toFixed(2)}}
+        </p>
+        <hr />
+        <label>Enter form detials if interested in event.</label>
+        <br/>
+        <label>Name of attendee:</label>
+        <input placeholder="Enter your name" id="InterestName" class="form-control" />
+        <label>Email Address:</label>
+        <input placeholder="Enter your eamil" id="InterestEmail" class="form-control" />
+        <label>Confirm Email Address:</label>
+        <input placeholder="Enter your eamil" id="InterestConfirmEmail" class="form-control" />
+        <label>Select interest level in event:</label>
+        <div class="dropdown" *ngIf="interestLevels?.length > 0">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            {{selectedInterestLevel?.level}}
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li *ngFor="let level of interestLevels">
+              <a class="dropdown-item" (click)="SelectInterestLevel(level)">{{level?.level}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div *ngIf="ErrorMessageShow">
+        Failed to submit interest.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="SubmitInterest()">Sumbit Interest</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
