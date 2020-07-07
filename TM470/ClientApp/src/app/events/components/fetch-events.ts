@@ -67,26 +67,58 @@ export class FetchEventsComponent {
 
   public SubmitEditEvent() {
     this.ErrorMessageShow = false;
-    var Id = $("#EditVenueId").val();
-    var capacity = $("#EditVenueCapacity").val();
+    var Id = $("#EditEventId").val();
+    var capacity = $("#EditEventCapacity").val();
+    var ticketsSold = $("#EditTicketsSold").val();
+    var ticketPrice = $("#EditEventPrice").val().replace("£", "");
+    this.selectedEvent.name = $("#EditEventName").val();
+    this.selectedEvent.information = $("#EditEventInformation").val();
+
+    this.selectedEvent.eventDate = $("#EditEventDate").val();
+    this.selectedEvent.eventLiveDate = $("#EditEventLiveDate").val();
     if (parseInt(Id) != NaN) {
       this.selectedEvent.id = parseInt(Id);
       if (parseInt(capacity) != NaN) {
         this.selectedEvent.eventCapacity = parseInt(capacity);
-        var url = this._baseUrl + 'events' + '/SubmitEditEvent';
-        let data = {
-          Id: this.selectedEvent.id,
-          Name: this.selectedEvent.name
-        }
-        this._http.post<EventEditResult>(url, data)
-          .subscribe(result => {
-            if (result.message == "Edited new Venue") {
-              window.location.reload();
-            } else {
+        if (parseInt(ticketsSold) != NaN) {
+          this.selectedEvent.ticketsSold = parseInt(ticketsSold);
+          if (parseFloat(ticketPrice) != NaN) {
+            this.selectedEvent.ticketPrice = parseFloat(ticketPrice);
+            if (Date.parse(this.selectedEvent.eventDate) != NaN) {
+              if (Date.parse(this.selectedEvent.eventLiveDate) != NaN) {
+
+                this.selectedEvent.eventType.eventTypeId = this.selectedEditEventType.id;
+                this.selectedEvent.eventType.eventTypeName = this.selectedEditEventType.type;
+                this.selectedEvent.venue.venueId = this.selectedEditEventVenue.id;
+                this.selectedEvent.venue.venueName = this.selectedEditEventVenue.name;
+
+                var url = this._baseUrl + 'events' + '/SubmitEditEvent';
+                let data = this.selectedEvent
+                this._http.post<EventEditResult>(url, data)
+                  .subscribe(result => {
+                    if (result.message == "Edited new Event") {
+                      window.location.reload();
+                    } else {
+                      this.ErrorMessageShow = true;
+                    }
+
+                  }, error => console.error(error));
+              }
+              else {
+                this.ErrorMessageShow = true;
+              }
+            }
+            else {
               this.ErrorMessageShow = true;
             }
-
-          }, error => console.error(error));
+          }
+          else {
+            this.ErrorMessageShow = true;
+          }
+        }
+        else {
+          this.ErrorMessageShow = true;
+        }
       }
       else {
         this.ErrorMessageShow = true;

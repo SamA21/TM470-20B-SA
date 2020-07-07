@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using TM470.Data;
@@ -205,9 +206,9 @@ namespace TM470.Controllers
         }
 
         [HttpPost]
-        public JsonResult SubmitEditEvent([FromBody] VenueEditModel venue)
+        public JsonResult SubmitEditEvent([FromBody] EditEventModel editEvent)
         {
-            if (venue != null)
+            if (editEvent != null)
             {
                 var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var currentUser = _dbContext.Users.SingleOrDefault(x => x.Id == currentUserId);
@@ -216,30 +217,87 @@ namespace TM470.Controllers
                     var company = _dbContext.Company.SingleOrDefault(x => x.CompanyId == currentUser.CompanyId);
                     if (company != null)
                     {
-                        var existing = _dbContext.Venue.SingleOrDefault(x => x.VenueId == venue.Id);
+                        var existing = _dbContext.Event.SingleOrDefault(x => x.EventId == editEvent.Id);
                         if (existing != null)
                         {
                             bool saved = true;
                             string error = string.Empty;
-                            try
+                            if (DateTime.TryParse(editEvent.EventDate, out DateTime eventDate))
                             {
-                                existing.Capacity = venue.Capacity;
-                                existing.VenueName = venue.Name;
-                                existing.VenueLocation = venue.Location;
+                                var parsedDate = DateTime.TryParse(editEvent.EventLiveDate, out DateTime eventLiveDate);
+                                if (!parsedDate)
+                                    eventLiveDate = DateTime.Now;
 
-                                _dbContext.Entry(existing).State = EntityState.Modified;
-                                _dbContext.SaveChanges();
+                                bool alreadyExists = false;
+                                if (existing.EventName.ToLower() != editEvent.Name.ToLower())
+                                {
+                                    var sameNames = _dbContext.Event.Where(x => x.EventName == editEvent.Name);
+                                    if (sameNames.Count() > 0)
+                                        alreadyExists = true;
+                                }
+
+                                var venue = _dbContext.Venue.SingleOrDefault(x => x.VenueId == editEvent.Venue.VenueId);
+                                if (venue != null)
+                                {
+                                    var eventType = _dbContext.EventType.SingleOrDefault(x => x.EventTypeId == editEvent.EventType.EventTypeId);
+                                    if (eventType != null)
+                                    {
+                                        if (!alreadyExists)
+                                        {
+                                            try
+                                            {
+                                                existing.EventCapacity = editEvent.EventCapacity;
+                                                existing.EventInformation = editEvent.Information;
+                                                existing.EventDate = eventDate;
+                                                existing.EventLiveDate = eventLiveDate;
+                                                existing.EventName = editEvent.Name;
+                                                existing.TicketsSold = editEvent.TicketsSold;
+                                                existing.TicketPrice = editEvent.TicketPrice;
+                                                existing.EventType = eventType;
+                                                existing.EventTypeId = eventType.EventTypeId;
+                                                existing.Venue = venue;
+                                                existing.VenueId = venue.VenueId;
+
+                                                existing.UpdateDate = DateTime.Now;
+                                                existing.UpdatedBy = currentUser;
+
+                                                _dbContext.Entry(existing).State = EntityState.Modified;
+                                                _dbContext.SaveChanges();
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                saved = false;
+                                                error = ex.Message;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            saved = false;
+                                            error = "Name already in use";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        saved = false;
+                                        error = "Event Type invalid";
+                                    }
+                                }
+                                else
+                                {
+                                    saved = false;
+                                    error = "Venue invalid";
+                                }
                             }
-                            catch (Exception ex)
+                            else
                             {
                                 saved = false;
-                                error = ex.Message;
+                                error = "No valid event date";
                             }
 
                             if (!saved)
-                                return Json(new { Message = "Failed to edit Venue " + error });
+                                return Json(new { Message = "Failed to edit Event " + error });
                             else
-                                return Json(new { Message = "Edited new Venue" });
+                                return Json(new { Message = "Edited new Event" });
 
                         }
                         else
