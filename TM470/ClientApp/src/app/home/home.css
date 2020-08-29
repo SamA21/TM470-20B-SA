@@ -1,9 +1,23 @@
 .card {
-  width: 29%;
+  width: 30%;
   flex-wrap: wrap;
   flex: initial;
-  margin-bottom:25px;
+  margin-bottom: 25px;
+  background-color: #373535;
+  border:0px;
 }
+
+.card-deck{
+    color:#FFF;
+}
+.card .card-footer {
+  background-color: #252323;
+}
+
+h1 {
+  color: #FFF;
+}
+
 
 .card:hover {
   cursor: pointer;

@@ -5,3 +5,11 @@
 #VenuesList tr span:hover {
   cursor: default!important;
 }
+#VenuesList {
+  border: 1px solid #FFF !important;
+}
+
+
+  #VenuesList th {
+    border-color: #FFF !important;
+  }

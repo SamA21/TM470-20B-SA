@@ -1,3 +1,6 @@
 dropdown-menu li:hover{
     cursor:pointer;
 }
+#tableLabel {
+  color: #FFF !important;
+}
