@@ -22,6 +22,7 @@ namespace TM470.Models
         public int CompanyId { get; set; }
         public Company Company { get; set; }
         public int DaysUntilEvent { get; set; }
+        public string ImageURL { get; set; }
 
     }
 }

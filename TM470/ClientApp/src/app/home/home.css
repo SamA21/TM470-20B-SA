@@ -1,7 +1,19 @@
+.card {
+  width: 29%;
+  flex-wrap: wrap;
+  flex: initial;
+  margin-bottom:25px;
+}
+
 .card:hover {
   cursor: pointer;
 }
 
 #selectedEvent label{
     font-weight:bolder;
+}
+
+.card-img-top{
+    min-height:300px;
+    max-height:300px;
 }

@@ -3,10 +3,15 @@
 
 <div class="card-deck">
   <div class="card" *ngFor="let event of events" (click)="selectEvent(event)">
+
+    <img *ngIf="event.imageURL.length > 0" class="card-img-top" src="{{event.imageURL}}" alt="Event Image">
     <div class="card-body">
       <h5 class="card-title">{{event.name}}</h5>
       <p class="card-text">{{ (event.information.length > 100 ? event.information.slice(' ', 120) + '...' : event.information)}}</p>
-      <p class="card-text"><small class="text-muted">Event Date {{ (event.daysUntilEvent == 0 ? "Today" : "in " + event.daysUntilEvent + " day(s)" )}}</small></p>
+
+    </div>
+    <div class="card-footer">
+      Event Date {{ (event.daysUntilEvent == 0 ? "Today" : "in " + event.daysUntilEvent + " day(s)" )}}
     </div>
   </div>
 </div>

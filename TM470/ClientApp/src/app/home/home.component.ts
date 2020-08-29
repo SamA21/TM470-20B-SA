@@ -127,6 +127,7 @@ interface Events {
   ticketsSold: number;
   company: Company
   daysUntilEvent: number;
+  imageURL: string;
 }
 
 

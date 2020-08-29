@@ -68,10 +68,9 @@ namespace TM470.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Company Name")] 
             public string CompanyName { get; set; }
-            [Required]
+        
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
-            [Required]
             [Display(Name = "Surname")]
             public string Surname { get; set; }
         }

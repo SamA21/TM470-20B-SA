@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,5 +16,6 @@ namespace TM470.Models
         public int EventTypeId { get; set; }
         public int EventCapacity { get; set; }// if needs to be different to venue capacity
         public decimal TicketPrice { get; set; }
+        public string ImageName { get; set; }
     }
 }

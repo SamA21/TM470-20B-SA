@@ -11,7 +11,10 @@
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
   </PropertyGroup>
-
+  <ItemGroup>                                                                                                                         
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />                                                                         
+  </ItemGroup>    
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.2" />

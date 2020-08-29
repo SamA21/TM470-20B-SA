@@ -1,8 +1,10 @@
 import { Component, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEventType} from '@angular/common/http';
 import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap-datepicker'
+import { FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'create-event',
@@ -27,8 +29,18 @@ export class CreateEventComponent {
     this.selectedEventType = <EventTypes>{};
     this.selectedEventType.type = "Select Event Type";
     this.selectedEventVenue = <Venues>{};
-    this.selectedEventVenue.name = "Select Event Venue";  
+    this.selectedEventVenue.name = "Select Event Venue";
   }
+
+  uploadingImage: File;
+
+  public FileChanged(event) {
+    let fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      this.uploadingImage = fileList[0];
+    }
+  }
+
 
   public CreateEvent() {
     $('#CreateEventForm').modal();
@@ -76,28 +88,56 @@ export class CreateEventComponent {
 
     if (Date.parse(eventDate) != NaN) {
       if (Date.parse(eventLiveDate) != NaN) {
+        let formData: CreateEventViewModel = <CreateEventViewModel>{};
 
-        let data = {
-          Name: this.newEvent.name,
-          Information: this.newEvent.information,
-          VenueId: this.newEvent.venueId,
-          EventTypeId: this.newEvent.eventTypeId,
-          EventCapacity: this.newEvent.eventCapacity,
-          TicketPrice: this.newEvent.ticketPrice,
-          EventDate: eventDate,
-          EventLiveDate: eventLiveDate
-        }
+        formData.name = this.newEvent.name;
+        formData.information = this.newEvent.information;
+        formData.venueId = this.newEvent.venueId;
+        formData.eventTypeId = this.newEvent.eventTypeId;
+        formData.eventCapacity =  this.newEvent.eventCapacity;
+        formData.ticketPrice = this.newEvent.ticketPrice;
+        formData.eventDate = eventDate;
+        formData.eventLiveDate = eventLiveDate;
+        console.log(this.uploadingImage);
+        formData.imageName = this.uploadingImage.name;
+
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
         let url = this._baseUrl + 'events' + '/SubmitNewEvent';
-        this._http.post<EventResult>(url, data)
+        let data = JSON.stringify(formData);
+        this._http.post<EventResult>(url, data, { headers: headers })
           .subscribe(result => {
             if (result.message == "Created new Event") {
-              window.location.reload();
+              console.log(this.uploadingImage);
+              if (this.uploadingImage === undefined) {
+                window.location.reload();//reload as no images and event created
+              }
+
+              const imageData = new FormData();
+              imageData.append(this.uploadingImage.name, this.uploadingImage);
+
+              let imageUrl = this._baseUrl + 'api' + '/FileUpload';
+              console.log(imageUrl);
+
+              const uploadReq = new HttpRequest('POST', imageUrl, imageData, { reportProgress: true });
+
+              let progress = 0;
+              console.log(event);
+
+              this._http.request(uploadReq).subscribe(event => {
+                if (event.type === HttpEventType.UploadProgress) {
+                  progress = Math.round(100 * event.loaded / event.total);
+                  console.log(progress);
+                }
+              });
+
             } else {
               this.ErrorMessageShow = true;
             }
-
-          }, error => console.error(error));
+          }, error => {
+            console.error(error)
+          });
+        
       }
     }
   }
@@ -134,6 +174,9 @@ interface CreateEventViewModel {
   venueId: number;
   eventTypeId: number;
   ticketPrice: number;
+  eventDate: string;
+  eventLiveDate: string;
+  imageName: string;
 }
 
 interface EventResult {

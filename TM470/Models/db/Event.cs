@@ -37,6 +37,7 @@ namespace TM470.Models.db
 
         [ForeignKey("CompanyId")]
         public Company Company { get; set; }
+        public string MainImageName { get; set; }
 
     }
 }

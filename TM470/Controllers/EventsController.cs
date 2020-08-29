@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 using TM470.Data;
 using TM470.Models.db;
 using TM470.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace TM470.Controllers
 {
@@ -18,13 +21,16 @@ namespace TM470.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _dbContext;
+        private IHostingEnvironment _env;
 
         public EventsController(
             UserManager<ApplicationUser> userManager, 
-            ApplicationDbContext dbContext)
+            ApplicationDbContext dbContext,
+            IHostingEnvironment environment)
         {
             _userManager = userManager;
             _dbContext = dbContext;
+            _env = environment;
         }
 
 
@@ -35,6 +41,9 @@ namespace TM470.Controllers
             events.Events = new List<EventViewModel>();
             var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var currentUser = _dbContext.Users.SingleOrDefault(x => x.Id == currentUserId);
+            string path = $"https://{Request.Host}/uploads/";
+            string webRootPath = _env.WebRootPath;
+
             if (currentUser != null)
             {
                 var company = _dbContext.Company.SingleOrDefault(x => x.CompanyId == currentUser.CompanyId);
@@ -52,7 +61,8 @@ namespace TM470.Controllers
                         Information = x.EventInformation,
                         Name = x.EventName,
                         PeopleIntrested = x.PeopleIntrested,
-                        TicketsSold = x.TicketsSold
+                        TicketsSold = x.TicketsSold,
+                        ImageURL = x.MainImageName
                     }).ToList();
 
                 }
@@ -75,10 +85,28 @@ namespace TM470.Controllers
                     PeopleIntrested = x.PeopleIntrested,
                     TicketsSold = x.TicketsSold,
                     Company = _dbContext.Company.SingleOrDefault(y => y.CompanyId == x.CompanyId),
-                    CompanyId = x.CompanyId
+                    CompanyId = x.CompanyId,
+                    ImageURL = x.MainImageName
                 }).ToList();
             }
-            return events; // will return an empty venue list if can't find user/ company. 
+
+            foreach(var update in events.Events)
+            {
+                if (!string.IsNullOrWhiteSpace(update.ImageURL))
+                {
+                    bool exists = System.IO.File.Exists(Path.Combine(webRootPath, "Uploads", update.ImageURL));
+                    if (exists)
+                        update.ImageURL = path + update.ImageURL;
+                    else
+                        update.ImageURL = string.Empty;
+                }
+                else
+                {
+                    update.ImageURL = string.Empty;
+                }
+            }
+
+            return events; 
         }
 
         [HttpGet]
@@ -129,11 +157,10 @@ namespace TM470.Controllers
             return venues; // will return an empty venue list if can't find user/ company. 
         }
 
-
         [HttpPost]
         public JsonResult SubmitNewEvent([FromBody] CreateEventViewModel newEvent)
         {
-            if(newEvent != null)
+            if (newEvent != null)
             {
                 var currentUserId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var currentUser = _dbContext.Users.SingleOrDefault(x => x.Id == currentUserId);
@@ -180,11 +207,12 @@ namespace TM470.Controllers
                                                 UpdatedBy = currentUser,
                                                 EventLive = (eventLiveDate  <= DateTime.Now) ? true : false, //sets event live to be true if date is less than now. 
                                                 PeopleIntrested = 0,
-                                                TicketsSold = 0
+                                                TicketsSold = 0,
+                                                MainImageName = newEvent.ImageName
                                             };
                                             _dbContext.Event.Add(eventEntity);
                                             _dbContext.SaveChanges();
-                                        }//error handling encased in the else statments 
+                                        } 
                                         else
                                         {
                                             saved = false;
