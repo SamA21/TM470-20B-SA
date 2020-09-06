@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 
 import $ from 'jquery';
 import 'bootstrap';
-import 'bootstrap-datepicker'
 
 @Component({
   selector: 'app-home',

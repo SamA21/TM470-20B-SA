@@ -1,10 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEventType} from '@angular/common/http';
 import $ from 'jquery';
+import 'jquery-ui/ui/core';
+import 'jquery-ui/ui/widgets/datepicker';
 import 'bootstrap';
-import 'bootstrap-datepicker'
-import { FormsModule, ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'create-event',
@@ -45,9 +44,7 @@ export class CreateEventComponent {
   public CreateEvent() {
     $('#CreateEventForm').modal();
     $('.datepicker').datepicker({
-      format: "dd/mm/yyyy",
-      orientation: "auto left",
-      autoclose: true
+      format: "dd/mm/yy"
     });
     var url = this._baseUrl + 'events' + '/GetEventTypes';
     this._http.get<EventTypes[]>(url)

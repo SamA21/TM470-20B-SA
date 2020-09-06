@@ -2,8 +2,9 @@ import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import $ from 'jquery';
+import 'jquery-ui/ui/core';
+import 'jquery-ui/ui/widgets/datepicker';
 import 'bootstrap';
-import 'bootstrap-datepicker'
 
 @Component({
   selector: 'fetch-events',
@@ -59,9 +60,7 @@ export class FetchEventsComponent {
     this.selectedEditEventVenue.name = this.selectedEvent.venue.venueName;
     $('#EditEventForm').modal();
     $('.datepicker').datepicker({
-      format: "dd/mm/yyyy",
-      orientation: "auto left",
-      autoclose: true
+      dateFormat: "dd/mm/yy"
     });
   }
 
